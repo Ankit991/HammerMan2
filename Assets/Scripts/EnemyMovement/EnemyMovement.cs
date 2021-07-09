@@ -12,16 +12,21 @@ public class EnemyMovement : MonoBehaviour
     public Transform Player;
     public Enemytype Enemy;
     public int Walkingforce;
+    
     #endregion
 
     #region Private Field
     private Rigidbody Rb;
+    private Animator anim;
+    public bool AttackRandom;
     #endregion
 
     #region monobihaviour method
     private void Start()
     {
         Rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
+        InvokeRepeating("ChangeAttack", .1f, 4f);
     }
     public void FixedUpdate()
     {
@@ -33,28 +38,46 @@ public class EnemyMovement : MonoBehaviour
     #region Private Method
     private void LookTowardPLayer()
     {
-        Vector3 dir = Player.transform.position - this.transform.position;
-        Quaternion rot = Quaternion.LookRotation(dir);
-        transform.rotation = Quaternion.Lerp(this.transform.rotation, rot, 10 * Time.deltaTime);
+       
+            Vector3 dir = Player.transform.position - this.transform.position;
+            Quaternion rot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Lerp(this.transform.rotation, rot, 10 * Time.deltaTime);
+     
     }
     private void PlayerMovement()
     {
         float Distancefromplayer = Vector3.Distance(this.transform.position, Player.transform.position);
-        if (Distancefromplayer < 1)
+        
+        if (Distancefromplayer < 2)
         {
             Debug.Log("ToClose to the plater");
+          
+            if (AttackRandom)
+            {
+                anim.SetTrigger("Attack");
 
-            //calling Hit animation 
+            }
+            else
+            {
+                anim.SetTrigger("Attack1");
+            }
+            anim.SetBool("Walk", false);
+
 
         }else
-        {   
+        {
             //adding relative force to moveEnemy
+            anim.SetBool("Walk", true);
             Rb.AddRelativeForce(Vector3.forward * Walkingforce, ForceMode.Force);
         }
     }
     #endregion
 
     #region public method
+    public void ChangeAttack()
+    {
+        AttackRandom = !AttackRandom;
+    }
     #endregion
 
     // Start is called before the first frame update
