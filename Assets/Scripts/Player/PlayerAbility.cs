@@ -126,14 +126,19 @@ public class PlayerAbility : MonoBehaviour
             else
           if (Input.GetMouseButtonUp(0) && dropprojectile)
             {
-            joystick.SetActive(true);
+                joystick.SetActive(true);
                 dropprojectile = false;
                 projectileEffect();
                 projectile.SetActive(false);
 
             }
-      
-       
+
+        //if hammer not returning then we set trigger of hammer off;
+        //if (!hReturning&&Vector3.Distance(this.transform.position, HammerReal.transform.position) > 4)
+        //{
+        //    hammer_collider.isTrigger = false;
+        //}
+        Physics.IgnoreCollision(hammer_collider, GetComponent<Collider>());
 
     }
 
@@ -142,13 +147,15 @@ public class PlayerAbility : MonoBehaviour
     #region public method
     public void ThrowHammer()
     {
+        hReturning = false;
         HammerReal.SetActive(true);
         Hammerfake.SetActive(false);
         Hammer_trail.SetActive(true);
         checking = false;
-        hReturning = false;
+       
+      
         hammer.transform.parent = null;
-        StartCoroutine(ColliderOnoff());
+      
 
         hammer.isKinematic = false;
 
@@ -202,7 +209,7 @@ public class PlayerAbility : MonoBehaviour
              RaycastHit hit;
         if (Physics.Raycast(ray,out hit, 50))
         {
-            Debug.Log(hit.collider.name+" "+hit.point);
+           // Debug.Log(hit.collider.name+" "+hit.point);
             projectile.SetActive(true);
             Vector3 hitpoint = hit.point;
             hitpoint.y = 1.1f;
@@ -212,8 +219,12 @@ public class PlayerAbility : MonoBehaviour
         }  
        
     }
+    /// <summary>
+    /// not working method 
+    /// </summary>
     public void projectileEffect()
     {
+      
         if (RefillProjectiledone)
         {
             RefillProjectiledone = false;
@@ -221,8 +232,16 @@ public class PlayerAbility : MonoBehaviour
             Collider[] col = Physics.OverlapSphere(projectile.transform.position, WaveEffectRadius);
             foreach (Collider hit in col)
             {
+               
+                    
+              
                 if (hit != playercol)
                 {
+                    if (hit.gameObject.tag == "Enemy")
+                    {
+                        hit.gameObject.GetComponent<EnemyDeath>().TurnOnRagdoll();
+                    }
+
                     Rigidbody hitrb = hit.GetComponent<Rigidbody>();
                     if (hitrb != null)
                     {
@@ -249,7 +268,7 @@ public class PlayerAbility : MonoBehaviour
         
         HammerRecieve.Play();
         anim.SetBool("Pull", true);
-        hammer_collider.isTrigger = true;
+      //  hammer_collider.isTrigger = true;
         checking = true;
         time = 00f;
         oldpos = hammer.position;
@@ -294,6 +313,10 @@ public class PlayerAbility : MonoBehaviour
         {
             if (hit != playercol)
             {
+                if (hit.gameObject.tag == "Enemy")
+                {
+                    hit.gameObject.GetComponent<EnemyDeath>().TurnOnRagdoll();
+                }
                 Rigidbody hitrb = hit.GetComponent<Rigidbody>();
                 if (hitrb != null)
                 {
@@ -318,11 +341,7 @@ public class PlayerAbility : MonoBehaviour
         yield return new WaitForSeconds(2f);
         RefillProjectiledone = true;
     }
-    IEnumerator ColliderOnoff()
-    {
-        yield return new WaitForSeconds(.1f);
-        hammer_collider.isTrigger = false;
-    }
+   
     IEnumerator Particle()
     {
         yield return new WaitForSeconds(.05f);

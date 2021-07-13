@@ -182,4 +182,14 @@ public class Playercontrolls : MonoBehaviour
         }
 
     }
+    private void OnTriggerEnter(Collider other)
+    {
+
+
+        if (other.gameObject.tag == "EnemySword")
+        {
+            Damage.DamageTaken(10);
+           
+        }
+    }
 }

@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Damage 
 {
-   public static int totalhealth=100;
-  public static void DamageTaken(int damege)
+   public static float totalhealth=100;
+  public static void DamageTaken(float damage)
     {
-        totalhealth -= damege;
+        totalhealth -= damage;
+       
+       
     }
 }

@@ -9,7 +9,7 @@ public class UI : MonoBehaviour
     public Image circularwaverefill;
     public Image projectilerefill;
     public Image Throwhammerrefill;
-
+    public Image Health;
    
     // Start is called before the first frame update
     void Start()
@@ -22,9 +22,12 @@ public class UI : MonoBehaviour
             Destroy(instance);
         }
     }
+    private void Update()
+    {
+        Health.fillAmount = Damage.totalhealth/100;
+    }
 
-   
-  public  IEnumerator circularwaverefilling()
+    public  IEnumerator circularwaverefilling()
     {
         while (circularwaverefill.fillAmount<.99f)
         {

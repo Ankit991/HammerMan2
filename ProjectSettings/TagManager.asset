@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Explosive
+  - EnemySword
+  - Enemy
   layers:
   - Default
   - TransparentFX

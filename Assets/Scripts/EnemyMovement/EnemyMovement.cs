@@ -9,7 +9,7 @@ public  enum Enemytype {
 public class EnemyMovement : MonoBehaviour
 {
     #region Public Field
-    public Transform Player;
+   
     public Enemytype Enemy;
     public int Walkingforce;
     
@@ -39,14 +39,14 @@ public class EnemyMovement : MonoBehaviour
     private void LookTowardPLayer()
     {
        
-            Vector3 dir = Player.transform.position - this.transform.position;
+            Vector3 dir = Gamemanager.instance.player.transform.position - this.transform.position;
             Quaternion rot = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Lerp(this.transform.rotation, rot, 10 * Time.deltaTime);
      
     }
     private void PlayerMovement()
     {
-        float Distancefromplayer = Vector3.Distance(this.transform.position, Player.transform.position);
+        float Distancefromplayer = Vector3.Distance(this.transform.position, Gamemanager.instance.player.transform.position);
         
         if (Distancefromplayer < 2)
         {
@@ -79,6 +79,7 @@ public class EnemyMovement : MonoBehaviour
         AttackRandom = !AttackRandom;
     }
     #endregion
+
 
     // Start is called before the first frame update
 
